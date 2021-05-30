@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!--控制台输出日志格式-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!--自定义输出格式-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:MM:SS} %-5level [%thread] %logger{30} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!--level: 日志的最低输出级别-->
+    <root level="debug">
+        <appender-ref ref="console"/>
+    </root>
+</configuration>
