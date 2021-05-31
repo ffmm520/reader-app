@@ -1,6 +1,7 @@
 package com.mimehoo.reader.service;
 
 import com.mimehoo.reader.entity.Member;
+import com.mimehoo.reader.entity.MemberReadState;
 
 public interface MemberService {
     /**
@@ -19,4 +20,12 @@ public interface MemberService {
      * @return 用户信息
      */
     Member login(String username, String password);
+
+    /**
+     * 获取阅读状态
+     * @param bookId 图书id
+     * @param memberId 会员id
+     * @return 阅读状态
+     */
+    MemberReadState getReadState(Long bookId, Long memberId);
 }

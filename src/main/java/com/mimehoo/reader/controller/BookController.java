@@ -1,13 +1,11 @@
 package com.mimehoo.reader.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.mimehoo.reader.entity.Book;
-import com.mimehoo.reader.entity.Category;
-import com.mimehoo.reader.entity.Evaluation;
-import com.mimehoo.reader.entity.Member;
+import com.mimehoo.reader.entity.*;
 import com.mimehoo.reader.service.BookService;
 import com.mimehoo.reader.service.CategoryService;
 import com.mimehoo.reader.service.EvaluationService;
+import com.mimehoo.reader.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +26,9 @@ public class BookController {
 
     @Autowired
     private EvaluationService evaluationService;
+
+    @Autowired
+    private MemberService memberService;
 
     @GetMapping("/")
     public ModelAndView showIndex(HttpSession session){
@@ -50,10 +51,16 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}")
-    public ModelAndView showDetail(@PathVariable("id") Long bookId){
+    public ModelAndView showDetail(@PathVariable("id") Long bookId, HttpSession session){
         Book book = bookService.selectById(bookId);
         List<Evaluation> list = evaluationService.selectByBookId(bookId);
         ModelAndView mv = new ModelAndView("/detail");
+        Member member = (Member) session.getAttribute("loginMember");
+        if (member != null) {
+            // 用户已经登录
+            MemberReadState readState = memberService.getReadState(bookId, member.getMemberId());
+            mv.addObject("readState",readState);
+        }
         mv.addObject("book", book);
         mv.addObject("evaluationList", list);
         return mv;

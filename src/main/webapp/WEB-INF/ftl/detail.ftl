@@ -47,7 +47,23 @@
         $.fn.raty.defaults.path = '/resources/raty/lib/images';
         $(function () {
             $(".stars").raty({readOnly: true});
-        })
+        });
+
+        $(function f() {
+            // 如果有阅读状态，说明已登录
+            <#if readState??>
+            $("*[data-read-state='${readState.readState}']").addClass("highlight");
+            </#if>
+            <#-- 没有阅读状态, -->
+            <#if !loginMember??>
+            <#-- 阅读状态、写评论、点赞按钮-->
+            $("*[data-read-state], #btnEvaluation, *[data-evaluation-id]").click(function(){
+                //未登录情况下提示"需要登录"
+                $("#exampleModalCenter").modal("show");
+            });
+            </#if>
+        });
+
     </script>
 </head>
 <body>
@@ -57,7 +73,7 @@
         <ul class="nav">
             <li class="nav-item">
                 <a href="/">
-                    <img src="https://m.imooc.com/static/wap/static/common/img/logo2.png"  class="mt-1"
+                    <img src="https://m.imooc.com/static/wap/static/common/img/logo2.png" class="mt-1"
                          style="width: 100px">
                 </a>
             </li>

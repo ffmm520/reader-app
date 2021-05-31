@@ -2,12 +2,15 @@ package com.mimehoo.reader.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mimehoo.reader.entity.Member;
+import com.mimehoo.reader.entity.MemberReadState;
 import com.mimehoo.reader.exception.BusinessException;
 import com.mimehoo.reader.mapper.MemberMapper;
+import com.mimehoo.reader.mapper.MemberReadStateMapper;
 import com.mimehoo.reader.service.MemberService;
 import com.mimehoo.reader.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -18,6 +21,9 @@ import java.util.Random;
 public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberMapper memberMapper;
+
+    @Autowired
+    private MemberReadStateMapper readStateMapper;
 
     @Override
     public Member register(String username, String password, String nickname) {
@@ -68,5 +74,14 @@ public class MemberServiceImpl implements MemberService {
             throw new BusinessException("M03", "请输入正确的用户名和密码");
         }
         return member;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
+    public MemberReadState getReadState(Long bookId, Long memberId) {
+        QueryWrapper<MemberReadState> wrapper = new QueryWrapper<>();
+        wrapper.eq("book_id", bookId);
+        wrapper.eq("member_id", memberId);
+        return readStateMapper.selectOne(wrapper);
     }
 }
