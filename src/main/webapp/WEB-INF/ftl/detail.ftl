@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>${book.bookName}</title>
@@ -49,7 +49,7 @@
             $(".stars").raty({readOnly: true});
         });
 
-        $(function f() {
+        $(function () {
             // 如果有阅读状态，说明已登录
             <#if readState??>
             $("*[data-read-state='${readState.readState}']").addClass("highlight");
@@ -58,24 +58,24 @@
             <#-- 没有登录状态, -->
             <#if !loginMember??>
             <#-- 阅读状态、写评论、点赞按钮-->
-            $("*[data-read-state], #btnEvaluation, *[data-evaluation-id]").click(function(){
+            $("*[data-read-state], #btnEvaluation, *[data-evaluation-id]").click(function () {
                 //未登录情况下提示"需要登录"
                 $("#exampleModalCenter").modal("show");
             });
             </#if>
 
-            <#-- 有登录状态, -->
+            <#-- 想看、看过 -->
             <#if loginMember??>
             <#-- 阅读状态、写评论、点赞按钮-->
-            $("*[data-read-state]").click(function(){
+            $("*[data-read-state]").click(function () {
                 // 获取阅读状态
                 let state = $(this).data("read-state");
-                $.post("/update_read_state",{
+                $.post("/update_read_state", {
                     memberId:${loginMember.memberId},
                     bookId:${book.bookId},
                     state: state
-                }, function(json) {
-                    if (json.code === "0"){
+                }, function (json) {
+                    if (json.code === "0") {
                         // 1.先移除全部data-read-state的高亮
                         $("*[data-read-state]").removeClass("highlight");
                         // 2.再给点击的按钮添加高亮
@@ -83,9 +83,45 @@
                     }
                 }, "json");
             });
-            </#if>
-        });
 
+            <#-- 短评-->
+            <#--打开对话框-->
+            $("#btnEvaluation").click(function () {
+                $("#dlgEvaluation").modal("show");
+                $("#score").raty({});//转换为星型组件
+            });
+            // 提交数据
+            $("#btnSubmit").click(function () {
+                let score = $("#score").raty("score");
+                let content = $("#content").val();
+                if (score == 0 || $.trim(content) == "") {
+                    return;
+                }
+                $.post("/evaluate", {
+                    bookId: ${book.bookId},
+                    memberId: ${loginMember.memberId},
+                    score: score,
+                    content: content
+                }, function (json) {
+                    if (json.code == "0") {
+                        window.location.reload();
+                    }
+                }, "json");
+            });
+            //评论点赞
+                $("*[data-evaluation-id]").click(function () {
+                    let evaluationId = $(this).data("evaluation-id");
+                    $.post("/enjoy", {
+                        evaluationId: evaluationId
+                    }, function(json){
+                        if (json.code == "0"){
+                            $("*[data-evaluation-id='" + evaluationId + "'] span").text(json.evaluation);
+                        }
+                    }, "json");
+                });
+            </#if>
+
+        });
     </script>
 </head>
 <body>
@@ -175,7 +211,7 @@
 </div>
 
 
-<!-- Modal -->
+<!-- 提示登录Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -190,7 +226,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- 短评 Modal -->
 <div class="modal fade" id="dlgEvaluation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
