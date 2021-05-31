@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mimehoo</groupId>
-    <artifactId>baboon-reader</artifactId>
+    <artifactId>reader-app</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>baboon-reader Maven Webapp</name>
+    <name>reader-app Maven Webapp</name>
     <url>http://www.mimehoo.com</url>
 
     <properties>
