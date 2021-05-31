@@ -28,4 +28,13 @@ public interface MemberService {
      * @return 阅读状态
      */
     MemberReadState getReadState(Long bookId, Long memberId);
+
+    /**
+     * 更新阅读状态
+     * @param bookId 图书id
+     * @param memberId 会员id
+     * @param state 状态
+     * @return 阅读状态
+     */
+    MemberReadState updateReadState(Long bookId, Long memberId, Integer state);
 }

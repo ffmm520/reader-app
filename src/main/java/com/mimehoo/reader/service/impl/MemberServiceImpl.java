@@ -84,4 +84,26 @@ public class MemberServiceImpl implements MemberService {
         wrapper.eq("member_id", memberId);
         return readStateMapper.selectOne(wrapper);
     }
+
+    @Override
+    public MemberReadState updateReadState(Long bookId, Long memberId, Integer state) {
+        QueryWrapper<MemberReadState> wrapper = new QueryWrapper<>();
+        wrapper.eq("book_id", bookId);
+        wrapper.eq("member_id", memberId);
+        MemberReadState memberReadState = readStateMapper.selectOne(wrapper);
+        if (memberReadState == null) {
+            // 返回值为空，则新增一条
+            memberReadState = new MemberReadState();
+            memberReadState.setReadState(state);
+            memberReadState.setBookId(bookId);
+            memberReadState.setCreateTime(new Date());
+            memberReadState.setMemberId(memberId);
+            readStateMapper.insert(memberReadState);
+        } else {
+            // 返回值有数据，则更新
+            memberReadState.setReadState(state);
+            readStateMapper.updateById(memberReadState);
+        }
+        return memberReadState;
+    }
 }

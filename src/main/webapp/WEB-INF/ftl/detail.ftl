@@ -54,12 +54,34 @@
             <#if readState??>
             $("*[data-read-state='${readState.readState}']").addClass("highlight");
             </#if>
-            <#-- 没有阅读状态, -->
+
+            <#-- 没有登录状态, -->
             <#if !loginMember??>
             <#-- 阅读状态、写评论、点赞按钮-->
             $("*[data-read-state], #btnEvaluation, *[data-evaluation-id]").click(function(){
                 //未登录情况下提示"需要登录"
                 $("#exampleModalCenter").modal("show");
+            });
+            </#if>
+
+            <#-- 有登录状态, -->
+            <#if loginMember??>
+            <#-- 阅读状态、写评论、点赞按钮-->
+            $("*[data-read-state]").click(function(){
+                // 获取阅读状态
+                let state = $(this).data("read-state");
+                $.post("/update_read_state",{
+                    memberId:${loginMember.memberId},
+                    bookId:${book.bookId},
+                    state: state
+                }, function(json) {
+                    if (json.code === "0"){
+                        // 1.先移除全部data-read-state的高亮
+                        $("*[data-read-state]").removeClass("highlight");
+                        // 2.再给点击的按钮添加高亮
+                        $("*[data-read-state='" + state + "']").addClass("highlight");
+                    }
+                }, "json");
             });
             </#if>
         });
@@ -80,8 +102,6 @@
 
         </ul>
     </nav>
-
-
     <div class="container mt-2 p-2 m-0" style="background-color:rgb(127, 125, 121)">
         <div class="row">
             <div class="col-4 mb-2 pl-0 pr-0">

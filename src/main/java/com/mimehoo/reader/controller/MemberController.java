@@ -1,6 +1,7 @@
 package com.mimehoo.reader.controller;
 
 import com.mimehoo.reader.entity.Member;
+import com.mimehoo.reader.entity.MemberReadState;
 import com.mimehoo.reader.exception.BusinessException;
 import com.mimehoo.reader.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,26 @@ public class MemberController {
     }
 
 
-
-
+    /**
+     * 更新阅读状态
+     * @param bookId 图书id
+     * @param memberId 会员id
+     * @param state 状态值
+     * @return 响应代码
+     */
+    @PostMapping("/update_read_state")
+    @ResponseBody
+    public Map<String, String> updateReadState(Long bookId, Long memberId, Integer state){
+        Map<String, String> map = new HashMap<>();
+        try {
+            MemberReadState readState = memberService.updateReadState(bookId, memberId, state);
+            map.put("code", "0");
+            map.put("msg", "success");
+        } catch (BusinessException e) {
+            e.printStackTrace();
+            map.put("code", e.getCode());
+            map.put("msg", e.getMsg());
+        }
+        return map;
+    }
 }
