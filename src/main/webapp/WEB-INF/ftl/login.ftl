@@ -132,6 +132,8 @@
 
         $btnReg.text("正在处理...");
         $btnReg.attr("disabled", "disabled");
+
+
         $.ajax({
             url: "/login",
             type: "post",
@@ -140,7 +142,7 @@
             success: function (data) {
                 console.info(data);
                 if (data.code == "0") {
-                    window.location = "/?ts=" + new Date().getTime();
+                        window.location = "/?ts=" + new Date().getTime();
                 } else {
                     showTips(true, "alert-danger", data.msg);
                     reloadVerifyCode();

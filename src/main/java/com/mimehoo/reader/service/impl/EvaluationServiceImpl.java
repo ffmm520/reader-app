@@ -50,7 +50,7 @@ public class EvaluationServiceImpl implements EvaluationService {
     public Evaluation enjoy(Long evaluateId) {
         Evaluation evaluation = evaluationMapper.selectById(evaluateId);
         evaluation.setEnjoy(evaluation.getEnjoy() + 1);
-        evaluationMapper.insert(evaluation);
+        evaluationMapper.updateById(evaluation);
         return evaluation;
     }
 }

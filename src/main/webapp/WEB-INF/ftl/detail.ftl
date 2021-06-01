@@ -1,3 +1,4 @@
+<#setting number_format="#">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -180,7 +181,6 @@
         ${book.description}
     </div>
 
-
     <div class="alert alert-primary w-100 mt-2" role="alert">短评
         <button type="button" id="btnEvaluation" class="btn btn-success btn-sm text-white float-right"
                 style="margin-top: -3px;">
@@ -194,7 +194,7 @@
                     <span class="pt-1 small text-black-50 mr-2">${evaluation.createTime?string("yy-MM")}</span>
                     <span class="mr-2 small pt-1">${evaluation.member.nickName}</span>
                     <span class="stars mr-2" data-score="${evaluation.score}"></span>
-                    <button type="button" data-evaluation-id="41"
+                    <button type="button" data-evaluation-id="${evaluation.evaluationId}"
                             class="btn btn-success btn-sm text-white float-right" style="margin-top: -3px;">
                         <img style="width: 24px;margin-top: -5px;" class="mr-1"
                              src="https://img3.doubanio.com/f/talion/7a0756b3b6e67b59ea88653bc0cfa14f61ff219d/pics/card/ic_like_gray.svg"/>
@@ -220,7 +220,7 @@
                 您需要登录才可以操作哦~
             </div>
             <div class="modal-footer">
-                <a href="/login.html" type="button" class="btn btn-primary">去登录</a>
+                <a href="/login.html?url=/book/${book.bookId}" type="button" class="btn btn-primary">去登录</a>
             </div>
         </div>
     </div>
