@@ -2,6 +2,7 @@ package com.mimehoo.reader.controller.manage;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.mimehoo.reader.entity.Book;
+import com.mimehoo.reader.mapper.BookMapper;
 import com.mimehoo.reader.service.BookService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -134,8 +135,24 @@ public class MBookController {
             map.put("msg", "success");
         } catch (Exception e) {
             e.printStackTrace();
+            map.put("code", "-1");
+            map.put("msg", "fail");
+        }
+        return map;
+    }
+
+    @GetMapping("/delete/{id}")
+    @ResponseBody
+    public Map<String, String> deleteBookById(@PathVariable("id") Long bookId){
+        Map<String, String> map = new HashMap<>();
+        try {
+            bookService.deleteBook(bookId);
             map.put("code", "0");
             map.put("msg", "success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("code", "-1");
+            map.put("msg", "fail");
         }
         return map;
     }

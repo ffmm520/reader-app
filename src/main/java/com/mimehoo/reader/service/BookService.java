@@ -23,4 +23,10 @@ public interface BookService {
     Book createBook(Book book);
 
     Book updateBook(Book book);
+
+    /**
+     * 根据id删除书籍
+     * @param bookId
+     */
+    void deleteBook(Long bookId);
 }

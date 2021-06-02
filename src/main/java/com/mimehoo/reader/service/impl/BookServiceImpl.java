@@ -4,7 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mimehoo.reader.entity.Book;
+import com.mimehoo.reader.entity.Evaluation;
+import com.mimehoo.reader.entity.MemberReadState;
 import com.mimehoo.reader.mapper.BookMapper;
+import com.mimehoo.reader.mapper.EvaluationMapper;
+import com.mimehoo.reader.mapper.MemberReadStateMapper;
 import com.mimehoo.reader.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookServiceImpl implements BookService {
     @Autowired
     private BookMapper bookMapper;
+
+    @Autowired
+    private EvaluationMapper evaluationMapper;
+
+    @Autowired
+    private MemberReadStateMapper memberReadStateMapper;
 
     @Override
     public IPage<Book> paging(Long categoryId, String order,Integer pageNum, Integer pageSize) {
@@ -62,5 +72,22 @@ public class BookServiceImpl implements BookService {
     public Book updateBook(Book book) {
         bookMapper.updateById(book);
         return book;
+    }
+
+    @Override
+    @Transactional
+    public void deleteBook(Long bookId) {
+        // 删除书籍
+        bookMapper.deleteById(bookId);
+
+        // 删除评论
+        QueryWrapper<Evaluation> evaluationQueryWrapper = new QueryWrapper<>();
+        evaluationQueryWrapper.eq("book_id", bookId);
+        evaluationMapper.delete(evaluationQueryWrapper);
+
+        // 删除用户阅读状态
+        QueryWrapper<MemberReadState> bookQueryWrapper = new QueryWrapper<>();
+        bookQueryWrapper.eq("book_id", bookId);
+        memberReadStateMapper.deleteById(bookId);
     }
 }
