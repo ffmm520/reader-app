@@ -133,7 +133,6 @@
         $btnReg.text("正在处理...");
         $btnReg.attr("disabled", "disabled");
 
-
         $.ajax({
             url: "/login",
             type: "post",
@@ -153,7 +152,6 @@
         });
         return false;
     });
-
 
 </script>
 </body>
