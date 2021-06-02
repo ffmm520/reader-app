@@ -125,6 +125,20 @@
             <version>1.15</version>
         </dependency>
 
+        <!-- 文件上传框架-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <!--html 解析-->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.10.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>

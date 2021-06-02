@@ -46,4 +46,10 @@ public class BookServiceImpl implements BookService {
     public Book selectById(Long bookId) {
         return bookMapper.selectById(bookId);
     }
+
+    @Override
+    public Book createBook(Book book) {
+        bookMapper.insert(book);
+        return book;
+    }
 }

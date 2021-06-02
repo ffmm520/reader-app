@@ -10,7 +10,6 @@ public interface BookService {
      * @param order 排序类型
      * @param pageNum 页码
      * @param pageSize 每页显示条数
-     * @return
      */
     IPage<Book> paging(Long categoryId, String order, Integer pageNum, Integer pageSize);
 
@@ -20,4 +19,6 @@ public interface BookService {
      * @return book对象
      */
     Book selectById(Long bookId);
+
+    Book createBook(Book book);
 }
