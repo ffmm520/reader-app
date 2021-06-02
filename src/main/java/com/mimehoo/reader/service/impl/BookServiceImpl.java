@@ -8,8 +8,11 @@ import com.mimehoo.reader.mapper.BookMapper;
 import com.mimehoo.reader.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(propagation = Propagation.NOT_SUPPORTED,readOnly = true)
 public class BookServiceImpl implements BookService {
     @Autowired
     private BookMapper bookMapper;
@@ -48,8 +51,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Book createBook(Book book) {
         bookMapper.insert(book);
+        return book;
+    }
+
+    @Override
+    @Transactional
+    public Book updateBook(Book book) {
+        bookMapper.updateById(book);
         return book;
     }
 }

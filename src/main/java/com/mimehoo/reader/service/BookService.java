@@ -21,4 +21,6 @@ public interface BookService {
     Book selectById(Long bookId);
 
     Book createBook(Book book);
+
+    Book updateBook(Book book);
 }

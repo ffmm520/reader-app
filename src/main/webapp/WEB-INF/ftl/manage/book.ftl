@@ -123,7 +123,7 @@
         $("#dlgBook #optype").val("update"); //设置当前表单提交时提交至"update"更新地址
 
         //发送ajax请求,获取对应图书信息
-        $.get("/manage/book/id/" + bookId, {}, function (json) {
+        $.get("/manage/book/" + bookId, {}, function (json) {
             //文本框回填已有数据
             $("#dlgBook #bookName").val(json.data.bookName);//书名
             $("#dlgBook #subTitle").val(json.data.subTitle); //子标题

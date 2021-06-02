@@ -5,6 +5,7 @@ import com.mimehoo.reader.entity.Book;
 import com.mimehoo.reader.service.BookService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,23 +73,23 @@ public class MBookController {
         // .jpg
         String suffix = filename.substring(i);
         String newFileName = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
-        String newFile = newFileName+suffix;
+        String newFile = newFileName + suffix;
         img.transferTo(new File(uploadPath + newFile));
         Map<String, Object> map = new HashMap<>();
         map.put("errno", "0");
-        map.put("data",new String[]{"/upload/"+newFile});
+        map.put("data", new String[]{"/upload/" + newFile});
         return map;
     }
 
     @PostMapping("create")
     @ResponseBody
-    public Map<String, String> createBook(Book book){
+    public Map<String, String> createBook(Book book) {
         Map<String, String> map = new HashMap<>();
         try {
             book.setEvaluationQuantity(0);
             book.setEvaluationScore(0F);
             Document doc = Jsoup.parse(book.getDescription());
-            Elements img = doc.select("img");
+            Element img = doc.select("img").first();
             String src = img.attr("src");
             book.setCover(src);
             bookService.createBook(book);
@@ -98,6 +99,43 @@ public class MBookController {
             e.printStackTrace();
             map.put("code", "-1");
             map.put("msg", "error");
+        }
+        return map;
+    }
+
+    @GetMapping("/{id}")
+    @ResponseBody
+    public Map<String, Object> updateBook(@PathVariable("id") Long bookId) {
+        Map<String, Object> map = new HashMap<>();
+        Book book = bookService.selectById(bookId);
+        map.put("code", "0");
+        map.put("msg", "success");
+        map.put("data", book);
+        return map;
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public Map<String, String> up(Book book){
+        Map<String, String> map = new HashMap<>();
+        try {
+            Book rawBook = bookService.selectById(book.getBookId());
+            rawBook.setAuthor(book.getAuthor());
+            rawBook.setBookName(book.getBookName());
+            rawBook.setSubTitle(book.getSubTitle());
+            rawBook.setDescription(book.getDescription());
+            rawBook.setCategoryId(book.getCategoryId());
+            Document doc = Jsoup.parse(book.getDescription());
+            Element img = doc.select("img").first();
+            String src = img.attr("src");
+            rawBook.setCover(src);
+            bookService.updateBook(rawBook);
+            map.put("code", "0");
+            map.put("msg", "success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("code", "0");
+            map.put("msg", "success");
         }
         return map;
     }
